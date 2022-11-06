@@ -18,8 +18,7 @@ par.rampLength = 0.1; % unit second
 
 par.filterFile = 'parameters_20210216/lowpass15Hz_coef_20200603';
 
-numStimGen = 5; % number of stimuli generated per condition
-numStimSel = 5; % number of stimuli selected per condition
+numStimGen = 1; % number of stimuli generated per condition
 
 %% generate stimuli
 
