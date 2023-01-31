@@ -239,12 +239,12 @@ p = plot(0.6:0.6:6,mean(fittedLine),'color','k', 'LineWidth', 2);
 xlabel('peak AM frequency (Hz)')
 ylabel('response')
 xticks(0.6:0.6:6)
-xticklabels({'','1.2','','2.4','','3.6','','4.8','','6.0'})
+xticklabels({'0.6','','','2.4','','','4.2','','','6.0'})
 xlim([0.6,6])
-yticks([1,2])
-yticklabels({'music','speech'})
+yticks([1,1.25,1.5,1.75,2])
+yticklabels({'music','','','','speech'})
 ylim([1,2])
-ytickangle(90)
+ytickangle(8)
 % xtickangle(45)
 set(gca,'fontsize',14)
 
@@ -268,7 +268,7 @@ set(gca,'fontsize',14)
 
 
 % subplot(1,3,2)
-subplot(1,10,[6,6.5])
+subplot(1,10,[5.75,6.75])
 bar(1,mean(slope),'facecolor',col(4,:),'LineWidth',2);
 hold on
 er = errorbar(1,mean(slope),std(slope)/sqrt(length(slope)),'LineWidth',2,'CapSize',20);   
