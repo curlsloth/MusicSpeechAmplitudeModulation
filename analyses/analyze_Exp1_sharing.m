@@ -219,15 +219,23 @@ cohenD = abs((mean(dataAll.gen(slope<0))-mean(dataAll.gen(slope>0)))/sp)
 
 %% plot
 
-figure('Position', [10 10 1200 400])
-subplot(1,3,1)
+figure('Position', [10 10 1500 500])
+subplot(1,12,[1,1.5])
+imagesc(dataPlot)
+yticks([])
+xticks([])
+ylabel('participants')
+xlabel('peak AM frequency (Hz)')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
 
 
+subplot(1,12,[3:5])
 dataPlot = dataAll.percResp;
 
+p = plot(0.6:0.6:6,fittedLine,'color',[col(4,:),0.35], 'LineWidth', 1);
 hold on
-col = lines(4);
-h1 = shadedErrorBar(0.6:0.6:6,mean(dataPlot),std(dataPlot)/sqrt(size(dataPlot,1)),{'*-','color',col(4,:), 'LineWidth', 2},0.5);
+p = plot(0.6:0.6:6,mean(fittedLine),'color','k', 'LineWidth', 2);
 xlabel('peak AM frequency (Hz)')
 ylabel('response')
 xticks(0.6:0.6:6)
@@ -236,16 +244,31 @@ xlim([0.6,6])
 yticks([1,1.25,1.5,1.75,2])
 yticklabels({'music','','','','speech'})
 ylim([1,2])
+ytickangle(90)
+% xtickangle(45)
 set(gca,'fontsize',14)
-grid on
-box on
+
+% hold on
+% col = lines(4);
+% h1 = shadedErrorBar(0.6:0.6:6,mean(dataPlot),std(dataPlot)/sqrt(size(dataPlot,1)),{'*-','color',col(4,:), 'LineWidth', 2},0.5);
+% xlabel('peak AM frequency (Hz)')
+% ylabel('response')
+% xticks(0.6:0.6:6)
+% xticklabels({'0.6','','','2.4','','','4.2','','','6.0'})
+% xlim([0.6,6])
+% yticks([1,1.25,1.5,1.75,2])
+% yticklabels({'music','','','','speech'})
+% ylim([1,2])
+% set(gca,'fontsize',14)
+% grid on
+% box on
 
 
 
 
 
-subplot(1,3,2)
-
+% subplot(1,3,2)
+subplot(1,12,[6.5,7.5,8.5])
 bar(1,mean(slope),'facecolor',col(4,:),'LineWidth',2);
 hold on
 er = errorbar(1,mean(slope),std(slope)/sqrt(length(slope)),'LineWidth',2,'CapSize',20);   
@@ -259,11 +282,32 @@ xlim([0.4,1.6])
 
 
 
+subplot(1,12,[10:12])
+% subplot(1,3,3);
+scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),'MarkerEdgeColor',col(4,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;...
+hold on; scatter(slope(dataAll.gen==34),dataAll.gen(dataAll.gen==34),'MarkerEdgeColor',[0.7,0.7,0.7],'LineWidth',2)
 
-subplot(1,3,3);scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),'MarkerEdgeColor',col(4,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;...
-    hold on; scatter(slope(dataAll.gen==34),dataAll.gen(dataAll.gen==34),'MarkerEdgeColor',[0.7,0.7,0.7],'LineWidth',2)
 
-
+%% new plot
+figure
+p = plot(0.6:0.6:6,fittedLine,'color',[col(4,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(0.6:0.6:6,mean(fittedLine),'color','k', 'LineWidth', 2);
+% for i=1:numel(p)
+%     c = get(p(i), 'Color');
+%     set(p(i), 'Color', [c 0.5]);
+% end
+hold on
+% scatter(0.6:0.6:6,dataPlot,'jitter','on','MarkerEdgeColor',[0.2,0.2,0.2],'LineWidth',1, 'MarkerEdgeAlpha',.7)
+xlabel('peak AM frequency (Hz)')
+ylabel('response')
+xticks(0.6:0.6:6)
+xticklabels({'0.6','','','2.4','','','4.2','','','6.0'})
+xlim([0.6,6])
+yticks([1,1.25,1.5,1.75,2])
+yticklabels({'music','','','','speech'})
+ylim([1,2])
+set(gca,'fontsize',14)
 
 %% power estimation
 
