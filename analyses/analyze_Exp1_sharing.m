@@ -286,8 +286,10 @@ xlim([0.4,1.6])
 
 subplot(1,10,[8,10])
 % subplot(1,3,3);
-scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),'MarkerEdgeColor',col(4,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;...
-hold on; scatter(slope(dataAll.gen==34),dataAll.gen(dataAll.gen==34),'MarkerEdgeColor',[0.7,0.7,0.7],'LineWidth',2)
+% scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),'MarkerEdgeColor',col(4,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;...
+scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),100,'filled','MarkerFaceColor',col(4,:),'MarkerFaceAlpha',.7);xlabel('response slope');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;...
+
+hold on; scatter(slope(dataAll.gen==34),dataAll.gen(dataAll.gen==34),100,'MarkerEdgeColor',[0.7,0.7,0.7],'LineWidth',2)
 
 
 %% new plot
