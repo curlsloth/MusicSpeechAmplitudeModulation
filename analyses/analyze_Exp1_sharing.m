@@ -221,11 +221,13 @@ cohenD = abs((mean(dataAll.gen(slope<0))-mean(dataAll.gen(slope>0)))/sp)
 
 figure('Position', [10 10 1500 500])
 subplot(1,10,[1,1.25])
-imagesc(dataPlot)
+imagesc(0.6:0.6:6, 1:length(dataPlot) ,dataPlot)
 yticks([])
-xticks([])
+xticks([0.6:0.6:6])
+xticklabels({'0.6','','','','','','','','','6.0'})
 ylabel('participants')
 xlabel('peak AM frequency (Hz)')
+% set(gca, 'XTick',xtnew, 'XTickLabel',xtlbl) 
 cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
 cb.Ruler.TickLabelRotation=90;
 
