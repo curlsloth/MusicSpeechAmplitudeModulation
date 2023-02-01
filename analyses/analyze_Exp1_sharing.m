@@ -219,8 +219,13 @@ cohenD = abs((mean(dataAll.gen(slope<0))-mean(dataAll.gen(slope>0)))/sp)
 
 %% plot
 
+dataPlot = dataAll.percResp;
+
+col = lines(4);
+
+
 figure('Position', [10 10 1500 500])
-subplot(1,10,[1,1.25])
+subplot(1,10,[1,1.15])
 imagesc(0.6:0.6:6, 1:length(dataPlot) ,dataPlot)
 yticks([])
 xticks([0.6:0.6:6])
@@ -233,7 +238,6 @@ cb.Ruler.TickLabelRotation=90;
 
 
 subplot(1,10,[2.5,4.5])
-dataPlot = dataAll.percResp;
 
 p = plot(0.6:0.6:6,fittedLine,'color',[col(4,:),0.35], 'LineWidth', 1);
 hold on
