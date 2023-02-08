@@ -232,7 +232,6 @@ xticks([0.6:0.6:6])
 xticklabels({'0.6','','','','','','','','','6.0'})
 ylabel('participants')
 xlabel('peak AM frequency (Hz)')
-% set(gca, 'XTick',xtnew, 'XTickLabel',xtlbl) 
 cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
 cb.Ruler.TickLabelRotation=90;
 
@@ -251,26 +250,7 @@ yticks([1,2])
 yticklabels({'music','speech'})
 ylim([1,2])
 ytickangle(90)
-% xtickangle(45)
 set(gca,'fontsize',14)
-
-% hold on
-% col = lines(4);
-% h1 = shadedErrorBar(0.6:0.6:6,mean(dataPlot),std(dataPlot)/sqrt(size(dataPlot,1)),{'*-','color',col(4,:), 'LineWidth', 2},0.5);
-% xlabel('peak AM frequency (Hz)')
-% ylabel('response')
-% xticks(0.6:0.6:6)
-% xticklabels({'0.6','','','2.4','','','4.2','','','6.0'})
-% xlim([0.6,6])
-% yticks([1,1.25,1.5,1.75,2])
-% yticklabels({'music','','','','speech'})
-% ylim([1,2])
-% set(gca,'fontsize',14)
-% grid on
-% box on
-
-
-
 
 
 % subplot(1,3,2)
@@ -289,36 +269,44 @@ xlim([0.4,1.6])
 
 
 subplot(1,10,[8,10])
-% subplot(1,3,3);
-% scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),'MarkerEdgeColor',col(4,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;...
 scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),100,'filled','MarkerFaceColor',col(4,:),'MarkerFaceAlpha',.7);xlabel('response slope');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;...
 
 hold on; scatter(slope(dataAll.gen==34),dataAll.gen(dataAll.gen==34),100,'MarkerEdgeColor',[0.7,0.7,0.7],'LineWidth',2)
 
 
-%% new plot
-figure
-p = plot(0.6:0.6:6,fittedLine,'color',[col(4,:),0.35], 'LineWidth', 1);
-hold on
-p = plot(0.6:0.6:6,mean(fittedLine),'color','k', 'LineWidth', 2);
-% for i=1:numel(p)
-%     c = get(p(i), 'Color');
-%     set(p(i), 'Color', [c 0.5]);
-% end
-hold on
-% scatter(0.6:0.6:6,dataPlot,'jitter','on','MarkerEdgeColor',[0.2,0.2,0.2],'LineWidth',1, 'MarkerEdgeAlpha',.7)
-xlabel('peak AM frequency (Hz)')
-ylabel('response')
-xticks(0.6:0.6:6)
-xticklabels({'0.6','','','2.4','','','4.2','','','6.0'})
-xlim([0.6,6])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'music','','','','speech'})
-ylim([1,2])
-set(gca,'fontsize',14)
 
 %% power estimation
 
 statsPower = 0.8;
 sampsizepwr('t',[mean(slope),std(slope)],0,0.8,[],'Alpha',0.05)
 
+%% fit logistic function
+
+
+a = [];
+b = [];
+r2_logistic = [];
+for n = 1:size(dataPlot,1)
+    [xData, yData] = prepareCurveData( 0.6:0.6:6, dataPlot(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [3 0.5];
+    opts.Lower = [0.6 -Inf];
+    opts.Upper = [6 Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a(n) = fitresult.a;
+    b(n) = fitresult.b;
+    r2_logistic(n) = gof.rsquare;
+
+
+end
+
+[~,p, ~, stat] = ttest(b)
+
+[~,p, ~, stat] = ttest(r2_logistic, r2)
