@@ -330,4 +330,94 @@ sampsizepwr('t',[mean(slope_2),std(slope_2)],0,0.8)
 sampsizepwr('t',[mean(slope_3),std(slope_3)],0,0.8)
 
 
+%% fit logistic function
 
+
+a1 = [];
+b1 = [];
+r2_logistic1 = [];
+for n = 1:size(data1,1)
+    [xData, yData] = prepareCurveData( 0.15:0.1:0.55, data1(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [0.35 0.5];
+    opts.Lower = [0.15 -Inf];
+    opts.Upper = [0.55 Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a1(n) = fitresult.a;
+    b1(n) = fitresult.b;
+    r2_logistic1(n) = gof.rsquare;
+
+
+end
+
+
+a2 = [];
+b2 = [];
+r2_logistic2 = [];
+for n = 1:size(data2,1)
+    [xData, yData] = prepareCurveData( 0.15:0.1:0.55, data2(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [0.35 0.5];
+    opts.Lower = [0.15 -Inf];
+    opts.Upper = [0.55 Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a2(n) = fitresult.a;
+    b2(n) = fitresult.b;
+    r2_logistic2(n) = gof.rsquare;
+
+
+end
+
+
+a3 = [];
+b3 = [];
+r2_logistic3 = [];
+for n = 1:size(data3,1)
+    [xData, yData] = prepareCurveData( 0.15:0.1:0.55, data3(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [0.35 0.5];
+    opts.Lower = [0.15 -Inf];
+    opts.Upper = [0.55 Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a3(n) = fitresult.a;
+    b3(n) = fitresult.b;
+    r2_logistic3(n) = gof.rsquare;
+
+
+end
+
+[~,p, ~, stat] = ttest(b1)
+[~,p, ~, stat] = ttest(b2)
+[~,p, ~, stat] = ttest(b3)
+
+[~,p, ~, stat] = ttest([r2_logistic1, r2_logistic2, r2_logistic3], [r2_1,r2_2,r2_3])
+
+median()
+
+% [~,p, ~, stat] = ttest(r2_logistic, r2)
+% p = signrank(r2_logistic, r2)
+% [~,p] = kstest(r2_logistic-r2)
+
+median(r2_logistic)
+median(r2)

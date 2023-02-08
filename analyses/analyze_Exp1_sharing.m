@@ -308,5 +308,10 @@ for n = 1:size(dataPlot,1)
 end
 
 [~,p, ~, stat] = ttest(b)
+mean(r2_logistic<0)
+
+mean(r2_logistic-r2)
+median(r2_logistic-r2)
+
 
 [~,p, ~, stat] = ttest(r2_logistic, r2)

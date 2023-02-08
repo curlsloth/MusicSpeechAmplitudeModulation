@@ -314,3 +314,65 @@ subplot(2,3,6);scatter(slope_S,dataAll.gen,'MarkerEdgeColor',col(7,:),'LineWidth
 sampsizepwr('t',[mean(slope_M),std(slope_M)],0,0.8)
 sampsizepwr('t',[mean(slope_S),std(slope_S)],0,0.8)
 
+
+%% fit logistic function
+
+
+a_M = [];
+b_M = [];
+r2_logistic_M = [];
+for n = 1:size(dataM,1)
+    [xData, yData] = prepareCurveData( peakSNum, dataM(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [median(peakSNum) 0.5];
+    opts.Lower = [min(peakSNum) -Inf];
+    opts.Upper = [max(peakSNum) Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a_M(n) = fitresult.a;
+    b_M(n) = fitresult.b;
+    r2_logistic_M(n) = gof.rsquare;
+
+
+end
+
+
+a_S = [];
+b_S = [];
+r2_logistic_S = [];
+for n = 1:size(dataS,1)
+    [xData, yData] = prepareCurveData( peakSNum, dataS(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [median(peakSNum) 0.5];
+    opts.Lower = [min(peakSNum) -Inf];
+    opts.Upper = [max(peakSNum) Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a_S(n) = fitresult.a;
+    b_S(n) = fitresult.b;
+    r2_logistic_S(n) = gof.rsquare;
+
+
+end
+
+[~,p, ~, stat] = ttest(b_M)
+[~,p, ~, stat] = ttest(b_S)
+mean(r2_logistic_M<0)
+mean(r2_logistic_S<0)
+
+nanmedian([r2_logistic_M, r2_logistic_S]-[r2_M,r2_S])
+
+[~,p, ~, stat] = ttest(r2_logistic_M, r2_M)
+[~,p, ~, stat] = ttest(r2_logistic_S, r2_S)
