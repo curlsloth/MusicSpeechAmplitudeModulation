@@ -206,16 +206,19 @@ for n = 1:height(dataAll)
     r2_1(n) = mld.Rsquared.Ordinary;
     p1_fit(n) = coefTest(mld);
     slope_1(n) = mld.Coefficients.Estimate(2);
+    fittedLine_1(n,:) = mld.Fitted;
     
     mld = fitlm(0.15:0.1:0.55,x2);
     r2_2(n) = mld.Rsquared.Ordinary;
     p2_fit(n) = coefTest(mld);
     slope_2(n) = mld.Coefficients.Estimate(2);
+    fittedLine_2(n,:) = mld.Fitted;
     
     mld = fitlm(0.15:0.1:0.55,x3);
     r2_3(n) = mld.Rsquared.Ordinary;
     p3_fit(n) = coefTest(mld);
     slope_3(n) = mld.Coefficients.Estimate(2);
+    fittedLine_3(n,:) = mld.Fitted;
     
 end
 
@@ -320,6 +323,140 @@ scatter(slope_2,dataAll.gen,'MarkerEdgeColor',col(2,:),'LineWidth',2);title('2.5
 
 subplot(3,3,9);
 scatter(slope_3,dataAll.gen,'MarkerEdgeColor',col(3,:),'LineWidth',2);xlabel('response slope');title('4 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
+
+
+%% new plot
+
+
+
+col = lines(4);
+
+
+figure('Position', [10 10 1200 800])
+
+
+% 1 Hz
+subplot(3,10,[1,1.15])
+imagesc(0.15:0.1:0.55, 1:length(data1) ,data1, [1 2])
+yticks([])
+xticks([0.15:0.1:0.55])
+xticklabels({'0.15','','','','0.55'})
+ylabel('participants')
+xlabel('\sigma')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+
+subplot(3,10,[2.5,4])
+p = plot(0.15:0.1:0.55,fittedLine_1,'color',[col(1,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(0.15:0.1:0.55,mean(fittedLine_1),'color','k', 'LineWidth', 2);
+xticks(0.15:0.1:0.55)
+xlim([0.15,0.55])
+xtickangle(45)
+yticks([1,2])
+yticklabels({'music','speech'})
+% xlabel('\sigma')
+ylim([1,2])
+ylabel('response')
+ytickangle(90)
+set(gca,'fontsize',12)
+title('1 Hz')
+% grid on
+box on
+
+subplot(3,10,[9,10])
+scatter(slope_1,dataAll.gen,100,'filled','MarkerFaceColor',col(1,:),'MarkerFaceAlpha',.7);title('1 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
+
+
+
+% 2.5 Hz
+subplot(3,10,[1,1.15]+10)
+imagesc(0.15:0.1:0.55, 1:length(data2) ,data2, [1 2])
+yticks([])
+xticks([0.15:0.1:0.55])
+xticklabels({'0.15','','','','0.55'})
+ylabel('participants')
+xlabel('\sigma')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+
+subplot(3,10,[2.5,4]+10)
+p = plot(0.15:0.1:0.55,fittedLine_2,'color',[col(2,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(0.15:0.1:0.55,mean(fittedLine_2),'color','k', 'LineWidth', 2);
+xticks(0.15:0.1:0.55)
+xlim([0.15,0.55])
+xtickangle(45)
+% xlabel('\sigma')
+yticks([1,2])
+yticklabels({'music','speech'})
+ylim([1,2])
+ylabel('response')
+ytickangle(90)
+set(gca,'fontsize',12)
+title('2.5 Hz')
+% grid on
+box on
+
+subplot(3,10,[9,10]+10)
+scatter(slope_2,dataAll.gen,100,'filled','MarkerFaceColor',col(2,:),'MarkerFaceAlpha',.7);ylabel('General Musical Sophistication');title('2.5 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
+
+
+
+% 4 Hz
+subplot(3,10,[1,1.15]+20)
+imagesc(0.15:0.1:0.55, 1:length(data3) ,data3, [1 2])
+yticks([])
+xticks([0.15:0.1:0.55])
+xticklabels({'0.15','','','','0.55'})
+ylabel('participants')
+xlabel('\sigma')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+
+subplot(3,10,[2.5,4]+20)
+p = plot(0.15:0.1:0.55,fittedLine_3,'color',[col(3,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(0.15:0.1:0.55,mean(fittedLine_3),'color','k', 'LineWidth', 2);
+xticks(0.15:0.1:0.55)
+xlim([0.15,0.55])
+xtickangle(45)
+xlabel('\sigma')
+yticks([1,2])
+yticklabels({'music','speech'})
+ylim([1,2])
+ylabel('response')
+ytickangle(90)
+set(gca,'fontsize',12)
+title('4 Hz')
+% grid on
+box on
+
+subplot(3,10,[9,10]+20)
+scatter(slope_3,dataAll.gen,100,'filled','MarkerFaceColor',col(3,:),'MarkerFaceAlpha',.7);xlabel('response slope');title('4 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
+
+
+
+
+
+subplot(1,10,[5.5,7.5])
+
+bar(1,mean(slope_1),'facecolor',col(1,:),'LineWidth',2);hold on
+bar(2,mean(slope_2),'facecolor',col(2,:),'LineWidth',2);
+bar(3,mean(slope_3),'facecolor',col(3,:),'LineWidth',2);
+er = errorbar([1,2,3],[mean(slope_1),mean(slope_2),mean(slope_3)],...
+    [std(slope_1),std(slope_2),std(slope_3)]/sqrt(length(slope_3)),'LineWidth',2,'CapSize',20);   
+er.Color = [0 0 0];                            
+er.LineStyle = 'none'; 
+scatter(ones(length(slope_1),1),slope_1,'jitter','on','MarkerEdgeColor',[0.2,0.2,0.2],'LineWidth',1, 'MarkerEdgeAlpha',.7);
+scatter(ones(length(slope_2),1)*2,slope_2,'jitter','on','MarkerEdgeColor',[0.2,0.2,0.2],'LineWidth',1, 'MarkerEdgeAlpha',.7);
+scatter(ones(length(slope_3),1)*3,slope_3,'jitter','on','MarkerEdgeColor',[0.2,0.2,0.2],'LineWidth',1, 'MarkerEdgeAlpha',.7);
+xticks([1,2,3])
+xlim([0.25,3.75])
+xticklabels({'1 Hz','2.5 Hz','4 Hz'})
+xlabel('peak AM frequency')
+ylabel('response slope (regression coefficient)')
+set(gca,'fontsize',14)
 
 
 
