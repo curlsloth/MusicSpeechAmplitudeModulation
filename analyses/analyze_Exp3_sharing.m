@@ -387,8 +387,9 @@ end
 
 [~,p, ~, stat] = ttest(b_M)
 [~,p, ~, stat] = ttest(b_S)
-mean(r2_logistic_M<0)
-mean(r2_logistic_S<0)
+mean([r2_logistic_M,r2_logistic_S]<0)
+mean([r2_logistic_M,r2_logistic_S]-[r2_M,r2_S])
+median([r2_logistic_M,r2_logistic_S]-[r2_M,r2_S])
 
-[~,p, ~, stat] = ttest(r2_logistic_M, r2_M)
-[~,p, ~, stat] = ttest(r2_logistic_S, r2_S)
+
+[~,p, ~, stat] = ttest([r2_logistic_M, r2_logistic_S], [r2_M,r2_S])

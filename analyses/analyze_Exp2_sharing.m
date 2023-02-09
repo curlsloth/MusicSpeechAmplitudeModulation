@@ -413,11 +413,9 @@ end
 
 [~,p, ~, stat] = ttest([r2_logistic1, r2_logistic2, r2_logistic3], [r2_1,r2_2,r2_3])
 
-median()
-
-% [~,p, ~, stat] = ttest(r2_logistic, r2)
-% p = signrank(r2_logistic, r2)
-% [~,p] = kstest(r2_logistic-r2)
+mean([r2_logistic1, r2_logistic2, r2_logistic3] - [r2_1,r2_2,r2_3])
+median([r2_logistic1, r2_logistic2, r2_logistic3] - [r2_1,r2_2,r2_3])
+mean([r2_logistic1, r2_logistic2, r2_logistic3]<0)
 
 median(r2_logistic)
 median(r2)
