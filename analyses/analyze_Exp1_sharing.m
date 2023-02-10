@@ -234,6 +234,7 @@ ylabel('participants')
 xlabel('peak AM frequency (Hz)')
 cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
 cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
 
 
 subplot(1,10,[2.5,4.5])

@@ -262,6 +262,7 @@ ylabel('participants')
 xlabel('\sigma')
 cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
 cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
 
 subplot(3,10,[2.5,4])
 p = plot(0.15:0.1:0.55,fittedLine_1,'color',[col(1,:),0.35], 'LineWidth', 1);
@@ -296,6 +297,7 @@ ylabel('participants')
 xlabel('\sigma')
 cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
 cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
 
 subplot(3,10,[2.5,4]+10)
 p = plot(0.15:0.1:0.55,fittedLine_2,'color',[col(2,:),0.35], 'LineWidth', 1);
@@ -330,6 +332,7 @@ ylabel('participants')
 xlabel('\sigma')
 cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
 cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
 
 subplot(3,10,[2.5,4]+20)
 p = plot(0.15:0.1:0.55,fittedLine_3,'color',[col(3,:),0.35], 'LineWidth', 1);
