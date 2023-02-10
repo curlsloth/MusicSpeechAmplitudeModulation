@@ -242,89 +242,6 @@ std([r2_1,r2_2,r2_3])/sqrt(length([r2_1,r2_2,r2_3]))
 
 
 
-%% plot
-
-
-
-col = lines(4);
-
-
-figure('Position', [10 10 1000 650])
-
-subplot(3,3,1)
-h1 = shadedErrorBar(0.15:0.1:0.55,mean(data1),std(data1)/sqrt(size(data1,1)),{'*-','color',col(1,:), 'LineWidth', 2},0.5);
-xticks(0.15:0.1:0.55)
-xlim([0.15,0.55])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'music','','','','speech'})
-ylim([1,2])
-ylabel('response')
-set(gca,'fontsize',14)
-title('1 Hz')
-grid on
-box on
-
-subplot(3,3,4)
-h2 = shadedErrorBar(0.15:0.1:0.55,mean(data2),std(data2)/sqrt(size(data2,1)),{'*-','color',col(2,:), 'LineWidth', 2},0.5);
-xticks(0.15:0.1:0.55)
-xlim([0.15,0.55])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'music','','','','speech'})
-ylim([1,2])
-ylabel('response')
-set(gca,'fontsize',14)
-title('2.5 Hz')
-grid on
-box on
-
-subplot(3,3,7)
-h3 = shadedErrorBar(0.15:0.1:0.55,mean(data3),std(data3)/sqrt(size(data3,1)),{'*-','color',col(3,:), 'LineWidth', 2},0.5);
-xticks(0.15:0.1:0.55)
-xlim([0.15,0.55])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'music','','','','speech'})
-ylim([1,2])
-ylabel('response')
-set(gca,'fontsize',14)
-xlabel('\sigma','fontsize',20)
-title('4 Hz')
-grid on
-box on
-
-
-
-
-
-subplot(1,3,2)
-bar(1,mean(slope_1),'facecolor',col(1,:),'LineWidth',2);hold on
-bar(2,mean(slope_2),'facecolor',col(2,:),'LineWidth',2);
-bar(3,mean(slope_3),'facecolor',col(3,:),'LineWidth',2);
-er = errorbar([1,2,3],[mean(slope_1),mean(slope_2),mean(slope_3)],...
-    [std(slope_1),std(slope_2),std(slope_3)]/sqrt(length(slope_3)),'LineWidth',2,'CapSize',20);   
-er.Color = [0 0 0];                            
-er.LineStyle = 'none'; 
-scatter(ones(length(slope_1),1),slope_1,'jitter','on','MarkerEdgeColor',[0.2,0.2,0.2],'LineWidth',1, 'MarkerEdgeAlpha',.7);
-scatter(ones(length(slope_2),1)*2,slope_2,'jitter','on','MarkerEdgeColor',[0.2,0.2,0.2],'LineWidth',1, 'MarkerEdgeAlpha',.7);
-scatter(ones(length(slope_3),1)*3,slope_3,'jitter','on','MarkerEdgeColor',[0.2,0.2,0.2],'LineWidth',1, 'MarkerEdgeAlpha',.7);
-xticks([1,2,3])
-xlim([0.25,3.75])
-xticklabels({'1 Hz','2.5 Hz','4 Hz'})
-xlabel('peak AM frequency')
-ylabel('response slope (regression coefficient)')
-set(gca,'fontsize',14)
-
-
-
-subplot(3,3,3);
-scatter(slope_1,dataAll.gen,'MarkerEdgeColor',col(1,:),'LineWidth',2);title('1 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
-
-subplot(3,3,6);
-scatter(slope_2,dataAll.gen,'MarkerEdgeColor',col(2,:),'LineWidth',2);title('2.5 Hz');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);box on;
-
-subplot(3,3,9);
-scatter(slope_3,dataAll.gen,'MarkerEdgeColor',col(3,:),'LineWidth',2);xlabel('response slope');title('4 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
-
-
 %% new plot
 
 
@@ -554,5 +471,3 @@ mean([r2_logistic1, r2_logistic2, r2_logistic3] - [r2_1,r2_2,r2_3])
 median([r2_logistic1, r2_logistic2, r2_logistic3] - [r2_1,r2_2,r2_3])
 mean([r2_logistic1, r2_logistic2, r2_logistic3]<0)
 
-median(r2_logistic)
-median(r2)

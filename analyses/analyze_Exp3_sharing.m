@@ -217,6 +217,7 @@ for n = 1:height(dataAll)
     r2_M(n) = mld.Rsquared.Ordinary;
     pM_fit(n) = coefTest(mld);
     slope_M(n) = mld.Coefficients.Estimate(2);
+    fittedLine_M(n,:) = mld.Fitted;
     
 
     xS = dataS(n,:)';
@@ -224,6 +225,7 @@ for n = 1:height(dataAll)
     r2_S(n) = mld.Rsquared.Ordinary;
     pS_fit(n) = coefTest(mld);
     slope_S(n) = mld.Coefficients.Estimate(2);
+    fittedLine_S(n,:) = mld.Fitted;
 
 end
 
@@ -254,46 +256,88 @@ cohenD = (mean(dataAll.gen(slope_M<0))-mean(dataAll.gen(slope_M>0)))/sp
 
 
 
-%% plot
+%% new plot
+
+
 
 col = lines(7);
 
-figure('Position', [10 10 1000 500])
+
+figure('Position', [10 10 1200 600])
 
 
-subplot(2,3,1)
+% Music
+subplot(2,10,[1,1.15])
+imagesc(peakHzNum, 1:length(dataM) ,dataM, [1 2])
+yticks([])
+xticks(peakHzNum)
+xticklabels({'0.6','','','','4.2'})
+ylabel('participants')
+xlabel('peak AM frequency (Hz)')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'others','music'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+
+subplot(2,10,[2.5,4])
+p = plot(peakHzNum,fittedLine_M,'color',[col(4,:),0.35], 'LineWidth', 1);
 hold on
-h1 = shadedErrorBar(peakHzNum,mean(dataM),std(dataM)/sqrt(size(dataM,1)),{'*-','color',col(4,:), 'LineWidth', 2},0.5);
+p = plot(peakHzNum,mean(fittedLine_M),'color','k', 'LineWidth', 2);
 xlabel('peak AM frequency (Hz)')
 ylabel('response')
 xticks(peakHzNum)
 xlim([0.6,4.2])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'others','','','','music'})
+xtickangle(45)
+yticks([1,2])
+yticklabels({'others','music'})
 ylim([1,2])
+ylabel('response')
+ytickangle(90)
 set(gca,'fontsize',14)
 title('Music')
-grid on
+% grid on
 box on
 
-subplot(2,3,4)
+subplot(2,10,[9,10])
+scatter(slope_M,dataAll.gen,100,'filled','MarkerFaceColor',col(4,:),'MarkerFaceAlpha',.7);xlabel('response slope');ylabel('General Musical Sophistication');title('Music');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;
+
+
+
+% Speech
+subplot(2,10,[1,1.15]+10)
+imagesc(peakHzNum, 1:length(dataS) ,dataS, [1 2])
+yticks([])
+xticks(peakHzNum)
+xticklabels({'0.6','','','','4.2'})
+ylabel('participants')
+xlabel('peak AM frequency (Hz)')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'others','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+
+subplot(2,10,[2.5,4]+10)
+p = plot(peakHzNum,fittedLine_S,'color',[col(5,:),0.35], 'LineWidth', 1);
 hold on
-h2 = shadedErrorBar(peakHzNum,mean(dataS),std(dataS)/sqrt(size(dataS,1)),{'*-','color',col(5,:), 'LineWidth', 2},0.5);
+p = plot(peakHzNum,mean(fittedLine_S),'color','k', 'LineWidth', 2);
 xlabel('peak AM frequency (Hz)')
 ylabel('response')
 xticks(peakHzNum)
 xlim([0.6,4.2])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'others','','','','speech'})
+xtickangle(45)
+yticks([1,2])
+yticklabels({'others','speech'})
 ylim([1,2])
+ylabel('response')
+ytickangle(90)
 set(gca,'fontsize',14)
 title('Speech')
-grid on
+% grid on
 box on
 
+subplot(2,10,[9,10]+10)
+scatter(slope_S,dataAll.gen,100,'filled','MarkerFaceColor',col(5,:),'MarkerFaceAlpha',.7);xlabel('response slope');ylabel('General Musical Sophistication');title('Speech');set(gca,'fontsize',14);ylim([18,126]);box on;
 
 
-subplot(1,3,2)
+
+
+subplot(1,10,[5.5,7.5])
 bar(1,mean(slope_M),'facecolor',col(4,:),'LineWidth',2);hold on
 bar(2,mean(slope_S),'facecolor',col(5,:),'LineWidth',2);
 er = errorbar([1,2],[mean(slope_M),mean(slope_S)],...
@@ -308,10 +352,6 @@ xticklabels({'Music','Speech'})
 ylabel('response slope (regression coefficient)')
 set(gca,'fontsize',14)
 
-
-subplot(2,3,3);scatter(slope_M,dataAll.gen,'MarkerEdgeColor',col(4,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');title('Music');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;
-
-subplot(2,3,6);scatter(slope_S,dataAll.gen,'MarkerEdgeColor',col(5,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');title('Speech');set(gca,'fontsize',14);ylim([18,126]);box on;
 
 %% compare the current data with Gold MSI norm
 
