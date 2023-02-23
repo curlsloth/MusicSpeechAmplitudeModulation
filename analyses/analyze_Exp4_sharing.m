@@ -348,8 +348,8 @@ set(gca,'fontsize',14)
 
 %% estimate required N
 
-sampsizepwr('t',[mean(slope_M),std(slope_M)],0,0.8)
-sampsizepwr('t',[mean(slope_S),std(slope_S)],0,0.8)
+sampsizepwr('t',[mean(slope_M),std(slope_M)],0,0.8,[],'Alpha',0.05)
+sampsizepwr('t',[mean(slope_S),std(slope_S)],0,0.8,[],'Alpha',0.05)
 
 
 %% fit logistic function
