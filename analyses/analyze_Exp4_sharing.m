@@ -202,8 +202,6 @@ dataAll(dataAll.probeACC<0.9,:) = []; % whose accuracy on the probe trials lower
 dataAll(abs(dataAll.totalBiasM-0.5)>0.15,:) = [];
 dataAll(abs(dataAll.totalBiasS-0.5)>0.15,:) = [];
 
-
-
 %% regression
 
 
@@ -235,6 +233,11 @@ end
 
 abs(mean(slope_M)/std(slope_M))
 abs(mean(slope_S)/std(slope_S))
+
+
+% replace NaNs with 0
+r2_M(isnan(r2_M))=0;
+r2_S(isnan(r2_S))=0;
 
 mean([r2_M,r2_S])
 std([r2_M,r2_S])/sqrt(length([r2_M,r2_S]))

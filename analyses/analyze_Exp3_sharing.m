@@ -204,7 +204,6 @@ dataAll(abs(dataAll.totalBiasS-0.5)>0.15,:) = [];
 
 
 
-
 %% regression
 
 
@@ -246,8 +245,6 @@ std([r2_M,r2_S])/sqrt(length([r2_M,r2_S]))
 [r_MSIgen,p_MSIgen] = corr(slope_S',dataAll.gen)
 
 [~,p,~,stat] = ttest2(dataAll.gen(slope_M<0),dataAll.gen(slope_M>0),'vartype','unequal')
-
-[~,p,~,stat] = ttest2(slope_M(dataAll.gen>median(dataAll.gen)),slope_M(dataAll.gen<median(dataAll.gen)),'vartype','unequal')
 
 
 sp = sqrt( ((sum(slope_M<0)-1)*std(dataAll.gen(slope_M<0))^2 + (sum(slope_M>0)-1)*std(dataAll.gen(slope_M>0))^2) / (length(dataAll.gen)-2) );
