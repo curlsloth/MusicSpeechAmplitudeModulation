@@ -177,8 +177,6 @@ dataAll(dataAll.totalBias==0,:) = []; % whose responses were all 0
 dataAll(dataAll.probeACC<0.9,:) = []; % whose accuracy on the probe trials lower than 90%
 
 
-
-
 %% regression
 
 r2 = [];
@@ -219,33 +217,43 @@ cohenD = abs((mean(dataAll.gen(slope<0))-mean(dataAll.gen(slope>0)))/sp)
 
 %% plot
 
-figure('Position', [10 10 1200 400])
-subplot(1,3,1)
-
-
 dataPlot = dataAll.percResp;
 
-hold on
 col = lines(4);
-h1 = shadedErrorBar(0.6:0.6:6,mean(dataPlot),std(dataPlot)/sqrt(size(dataPlot,1)),{'*-','color',col(4,:), 'LineWidth', 2},0.5);
+
+
+figure('Position', [10 10 1500 500])
+subplot(1,10,[1,1.15])
+imagesc(0.6:0.6:6, 1:length(dataPlot) ,dataPlot)
+yticks([])
+xticks([0.6:0.6:6])
+xticklabels({'0.6','','','','','','','','','6.0'})
+ylabel('participants')
+xlabel('peak AM frequency (Hz)')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
+
+
+subplot(1,10,[2.5,4.5])
+
+p = plot(0.6:0.6:6,fittedLine,'color',[col(4,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(0.6:0.6:6,mean(fittedLine),'color','k', 'LineWidth', 2);
 xlabel('peak AM frequency (Hz)')
 ylabel('response')
 xticks(0.6:0.6:6)
-xticklabels({'0.6','','','2.4','','','4.2','','','6.0'})
+xticklabels({'','1.2','','2.4','','3.6','','4.8','','6.0'})
 xlim([0.6,6])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'music','','','','speech'})
+yticks([1,2])
+yticklabels({'music','speech'})
 ylim([1,2])
+ytickangle(90)
 set(gca,'fontsize',14)
-grid on
-box on
 
 
-
-
-
-subplot(1,3,2)
-
+% subplot(1,3,2)
+subplot(1,10,[6,6.5])
 bar(1,mean(slope),'facecolor',col(4,:),'LineWidth',2);
 hold on
 er = errorbar(1,mean(slope),std(slope)/sqrt(length(slope)),'LineWidth',2,'CapSize',20);   
@@ -259,9 +267,10 @@ xlim([0.4,1.6])
 
 
 
+subplot(1,10,[8,10])
+scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),100,'filled','MarkerFaceColor',col(4,:),'MarkerFaceAlpha',.7);xlabel('response slope');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;...
 
-subplot(1,3,3);scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),'MarkerEdgeColor',col(4,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;...
-    hold on; scatter(slope(dataAll.gen==34),dataAll.gen(dataAll.gen==34),'MarkerEdgeColor',[0.7,0.7,0.7],'LineWidth',2)
+hold on; scatter(slope(dataAll.gen==34),dataAll.gen(dataAll.gen==34),100,'MarkerEdgeColor',[0.7,0.7,0.7],'LineWidth',2)
 
 
 
@@ -270,3 +279,38 @@ subplot(1,3,3);scatter(slope(dataAll.gen~=34),dataAll.gen(dataAll.gen~=34),'Mark
 statsPower = 0.8;
 sampsizepwr('t',[mean(slope),std(slope)],0,0.8,[],'Alpha',0.05)
 
+%% fit logistic function
+
+
+a = [];
+b = [];
+r2_logistic = [];
+for n = 1:size(dataPlot,1)
+    [xData, yData] = prepareCurveData( 0.6:0.6:6, dataPlot(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [3 0.5];
+    opts.Lower = [0.6 -Inf];
+    opts.Upper = [6 Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a(n) = fitresult.a;
+    b(n) = fitresult.b;
+    r2_logistic(n) = gof.rsquare;
+
+
+end
+
+[~,p, ~, stat] = ttest(b)
+mean(r2_logistic<0)
+
+mean(r2_logistic-r2)
+median(r2_logistic-r2)
+
+
+[~,p, ~, stat] = ttest(r2_logistic, r2)

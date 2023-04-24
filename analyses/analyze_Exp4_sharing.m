@@ -202,8 +202,6 @@ dataAll(dataAll.probeACC<0.9,:) = []; % whose accuracy on the probe trials lower
 dataAll(abs(dataAll.totalBiasM-0.5)>0.15,:) = [];
 dataAll(abs(dataAll.totalBiasS-0.5)>0.15,:) = [];
 
-
-
 %% regression
 
 
@@ -217,6 +215,7 @@ for n = 1:height(dataAll)
     r2_M(n) = mld.Rsquared.Ordinary;
     pM_fit(n) = coefTest(mld);
     slope_M(n) = mld.Coefficients.Estimate(2);
+    fittedLine_M(n,:) = mld.Fitted;
     
     
     xS = dataS(n,:)';
@@ -224,7 +223,7 @@ for n = 1:height(dataAll)
     r2_S(n) = mld.Rsquared.Ordinary;
     pS_fit(n) = coefTest(mld);
     slope_S(n) = mld.Coefficients.Estimate(2);
-    
+    fittedLine_S(n,:) = mld.Fitted;
 
 end
 
@@ -234,6 +233,11 @@ end
 
 abs(mean(slope_M)/std(slope_M))
 abs(mean(slope_S)/std(slope_S))
+
+
+% replace NaNs with 0
+r2_M(isnan(r2_M))=0;
+r2_S(isnan(r2_S))=0;
 
 mean([r2_M,r2_S])
 std([r2_M,r2_S])/sqrt(length([r2_M,r2_S]))
@@ -246,48 +250,90 @@ std([r2_M,r2_S])/sqrt(length([r2_M,r2_S]))
 
 
 
+%% new plot
 
-%% plot
+
 
 col = lines(7);
 
-figure('Position', [10 10 1000 500])
+
+figure('Position', [10 10 1200 600])
 
 
+% Music
+subplot(2,10,[1,1.15])
+imagesc(peakSNum, 1:length(dataM) ,dataM, [1 2])
+yticks([])
+xticks(peakSNum)
+xticklabels({'0.15','','','','0.55'})
+ylabel('participants')
+xlabel('\sigma')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'others','music'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
 
-
-subplot(2,3,1)
-h1 = shadedErrorBar(peakSNum,mean(dataM),std(dataM)/sqrt(size(dataM,1)),{'*-','color',col(6,:), 'LineWidth', 2},0.5);
+subplot(2,10,[2.5,4])
+p = plot(peakSNum,fittedLine_M,'color',[col(6,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(peakSNum,mean(fittedLine_M),'color','k', 'LineWidth', 2);
+xlabel('\sigma')
 ylabel('response')
 xticks(peakSNum)
 xlim([0.15,0.55])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'others','','','','music'})
+xtickangle(45)
+yticks([1,2])
+yticklabels({'others','music'})
 ylim([1,2])
+ylabel('response')
+ytickangle(90)
 set(gca,'fontsize',14)
-xlabel('\sigma','fontsize',20)
 title('Music')
-grid on
+% grid on
 box on
 
-subplot(2,3,4)
-h2 = shadedErrorBar(peakSNum,mean(dataS),std(dataS)/sqrt(size(dataS,1)),{'*-','color',col(7,:), 'LineWidth', 2},0.5);
+subplot(2,10,[9,10])
+scatter(slope_M,dataAll.gen,100,'filled','MarkerFaceColor',col(6,:),'MarkerFaceAlpha',.7);xlabel('response slope');ylabel('General Musical Sophistication');title('Music');set(gca,'fontsize',14);ylim([18,126]);box on;
+
+
+
+% Speech
+subplot(2,10,[1,1.15]+10)
+imagesc(peakSNum, 1:length(dataS) ,dataS, [1 2])
+yticks([])
+xticks(peakSNum)
+xticklabels({'0.15','','','','0.55'})
+ylabel('participants')
+xlabel('\sigma')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'others','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
+
+subplot(2,10,[2.5,4]+10)
+p = plot(peakSNum,fittedLine_S,'color',[col(7,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(peakSNum,mean(fittedLine_S),'color','k', 'LineWidth', 2);
+xlabel('\sigma')
 ylabel('response')
 xticks(peakSNum)
 xlim([0.15,0.55])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'others','','','','speech'})
+xtickangle(45)
+yticks([1,2])
+yticklabels({'others','speech'})
 ylim([1,2])
+ylabel('response')
+ytickangle(90)
 set(gca,'fontsize',14)
-xlabel('\sigma','fontsize',20)
 title('Speech')
-grid on
+% grid on
 box on
 
+subplot(2,10,[9,10]+10)
+scatter(slope_S,dataAll.gen,100,'filled','MarkerFaceColor',col(7,:),'MarkerFaceAlpha',.7);xlabel('response slope');ylabel('General Musical Sophistication');title('Speech');set(gca,'fontsize',14);ylim([18,126]);box on;
 
 
 
-subplot(1,3,2)
+
+subplot(1,10,[5.5,7.5])
 bar(1,mean(slope_M),'facecolor',col(6,:),'LineWidth',2);hold on
 bar(2,mean(slope_S),'facecolor',col(7,:),'LineWidth',2);
 er = errorbar([1,2],[mean(slope_M),mean(slope_S)],...
@@ -303,14 +349,70 @@ ylabel('response slope (regression coefficient)')
 set(gca,'fontsize',14)
 
 
-subplot(2,3,3);scatter(slope_M,dataAll.gen,'MarkerEdgeColor',col(6,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');title('Music');set(gca,'fontsize',14);ylim([18,126]);box on;
-
-subplot(2,3,6);scatter(slope_S,dataAll.gen,'MarkerEdgeColor',col(7,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');title('Speech');set(gca,'fontsize',14);ylim([18,126]);box on;
-
-
-
 %% estimate required N
 
-sampsizepwr('t',[mean(slope_M),std(slope_M)],0,0.8)
-sampsizepwr('t',[mean(slope_S),std(slope_S)],0,0.8)
+sampsizepwr('t',[mean(slope_M),std(slope_M)],0,0.8,[],'Alpha',0.05)
+sampsizepwr('t',[mean(slope_S),std(slope_S)],0,0.8,[],'Alpha',0.05)
 
+
+%% fit logistic function
+
+
+a_M = [];
+b_M = [];
+r2_logistic_M = [];
+for n = 1:size(dataM,1)
+    [xData, yData] = prepareCurveData( peakSNum, dataM(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [median(peakSNum) 0.5];
+    opts.Lower = [min(peakSNum) -Inf];
+    opts.Upper = [max(peakSNum) Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a_M(n) = fitresult.a;
+    b_M(n) = fitresult.b;
+    r2_logistic_M(n) = gof.rsquare;
+
+
+end
+
+
+a_S = [];
+b_S = [];
+r2_logistic_S = [];
+for n = 1:size(dataS,1)
+    [xData, yData] = prepareCurveData( peakSNum, dataS(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [median(peakSNum) 0.5];
+    opts.Lower = [min(peakSNum) -Inf];
+    opts.Upper = [max(peakSNum) Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a_S(n) = fitresult.a;
+    b_S(n) = fitresult.b;
+    r2_logistic_S(n) = gof.rsquare;
+
+
+end
+
+[~,p, ~, stat] = ttest(b_M)
+[~,p, ~, stat] = ttest(b_S)
+nanmean([r2_logistic_M,r2_logistic_S]<0)
+nanmean([r2_logistic_M,r2_logistic_S]-[r2_M,r2_S])
+nanmedian([r2_logistic_M,r2_logistic_S]-[r2_M,r2_S])
+
+nanmedian([r2_logistic_M, r2_logistic_S]-[r2_M,r2_S])
+
+[~,p, ~, stat] = ttest([r2_logistic_M, r2_logistic_S], [r2_M,r2_S])

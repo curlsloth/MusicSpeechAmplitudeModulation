@@ -204,7 +204,6 @@ dataAll(abs(dataAll.totalBiasS-0.5)>0.15,:) = [];
 
 
 
-
 %% regression
 
 
@@ -217,6 +216,7 @@ for n = 1:height(dataAll)
     r2_M(n) = mld.Rsquared.Ordinary;
     pM_fit(n) = coefTest(mld);
     slope_M(n) = mld.Coefficients.Estimate(2);
+    fittedLine_M(n,:) = mld.Fitted;
     
 
     xS = dataS(n,:)';
@@ -224,6 +224,7 @@ for n = 1:height(dataAll)
     r2_S(n) = mld.Rsquared.Ordinary;
     pS_fit(n) = coefTest(mld);
     slope_S(n) = mld.Coefficients.Estimate(2);
+    fittedLine_S(n,:) = mld.Fitted;
 
 end
 
@@ -245,8 +246,6 @@ std([r2_M,r2_S])/sqrt(length([r2_M,r2_S]))
 
 [~,p,~,stat] = ttest2(dataAll.gen(slope_M<0),dataAll.gen(slope_M>0),'vartype','unequal')
 
-[~,p,~,stat] = ttest2(slope_M(dataAll.gen>median(dataAll.gen)),slope_M(dataAll.gen<median(dataAll.gen)),'vartype','unequal')
-
 
 sp = sqrt( ((sum(slope_M<0)-1)*std(dataAll.gen(slope_M<0))^2 + (sum(slope_M>0)-1)*std(dataAll.gen(slope_M>0))^2) / (length(dataAll.gen)-2) );
 
@@ -254,46 +253,90 @@ cohenD = (mean(dataAll.gen(slope_M<0))-mean(dataAll.gen(slope_M>0)))/sp
 
 
 
-%% plot
+%% new plot
+
+
 
 col = lines(7);
 
-figure('Position', [10 10 1000 500])
+
+figure('Position', [10 10 1200 600])
 
 
-subplot(2,3,1)
+% Music
+subplot(2,10,[1,1.15])
+imagesc(peakHzNum, 1:length(dataM) ,dataM, [1 2])
+yticks([])
+xticks(peakHzNum)
+xticklabels({'0.6','','','','4.2'})
+ylabel('participants')
+xlabel('peak AM frequency (Hz)')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'others','music'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
+
+subplot(2,10,[2.5,4])
+p = plot(peakHzNum,fittedLine_M,'color',[col(4,:),0.35], 'LineWidth', 1);
 hold on
-h1 = shadedErrorBar(peakHzNum,mean(dataM),std(dataM)/sqrt(size(dataM,1)),{'*-','color',col(4,:), 'LineWidth', 2},0.5);
+p = plot(peakHzNum,mean(fittedLine_M),'color','k', 'LineWidth', 2);
 xlabel('peak AM frequency (Hz)')
 ylabel('response')
 xticks(peakHzNum)
 xlim([0.6,4.2])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'others','','','','music'})
+xtickangle(45)
+yticks([1,2])
+yticklabels({'others','music'})
 ylim([1,2])
+ylabel('response')
+ytickangle(90)
 set(gca,'fontsize',14)
 title('Music')
-grid on
+% grid on
 box on
 
-subplot(2,3,4)
+subplot(2,10,[9,10])
+scatter(slope_M,dataAll.gen,100,'filled','MarkerFaceColor',col(4,:),'MarkerFaceAlpha',.7);xlabel('response slope');ylabel('General Musical Sophistication');title('Music');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;
+
+
+
+% Speech
+subplot(2,10,[1,1.15]+10)
+imagesc(peakHzNum, 1:length(dataS) ,dataS, [1 2])
+yticks([])
+xticks(peakHzNum)
+xticklabels({'0.6','','','','4.2'})
+ylabel('participants')
+xlabel('peak AM frequency (Hz)')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'others','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
+
+subplot(2,10,[2.5,4]+10)
+p = plot(peakHzNum,fittedLine_S,'color',[col(5,:),0.35], 'LineWidth', 1);
 hold on
-h2 = shadedErrorBar(peakHzNum,mean(dataS),std(dataS)/sqrt(size(dataS,1)),{'*-','color',col(5,:), 'LineWidth', 2},0.5);
+p = plot(peakHzNum,mean(fittedLine_S),'color','k', 'LineWidth', 2);
 xlabel('peak AM frequency (Hz)')
 ylabel('response')
 xticks(peakHzNum)
 xlim([0.6,4.2])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'others','','','','speech'})
+xtickangle(45)
+yticks([1,2])
+yticklabels({'others','speech'})
 ylim([1,2])
+ylabel('response')
+ytickangle(90)
 set(gca,'fontsize',14)
 title('Speech')
-grid on
+% grid on
 box on
 
+subplot(2,10,[9,10]+10)
+scatter(slope_S,dataAll.gen,100,'filled','MarkerFaceColor',col(5,:),'MarkerFaceAlpha',.7);xlabel('response slope');ylabel('General Musical Sophistication');title('Speech');set(gca,'fontsize',14);ylim([18,126]);box on;
 
 
-subplot(1,3,2)
+
+
+subplot(1,10,[5.5,7.5])
 bar(1,mean(slope_M),'facecolor',col(4,:),'LineWidth',2);hold on
 bar(2,mean(slope_S),'facecolor',col(5,:),'LineWidth',2);
 er = errorbar([1,2],[mean(slope_M),mean(slope_S)],...
@@ -308,10 +351,6 @@ xticklabels({'Music','Speech'})
 ylabel('response slope (regression coefficient)')
 set(gca,'fontsize',14)
 
-
-subplot(2,3,3);scatter(slope_M,dataAll.gen,'MarkerEdgeColor',col(4,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');title('Music');set(gca,'fontsize',14);ylim([18,126]);h=lsline;h.Color='k';h.LineWidth=1;box on;
-
-subplot(2,3,6);scatter(slope_S,dataAll.gen,'MarkerEdgeColor',col(5,:),'LineWidth',2);xlabel('response slope');ylabel('General Musical Sophistication');title('Speech');set(gca,'fontsize',14);ylim([18,126]);box on;
 
 %% compare the current data with Gold MSI norm
 
@@ -329,7 +368,67 @@ cohenD = (meanNORM-meanDATA)/sp
 
 %% power estimation
 
-sampsizepwr('t',[mean(slope_M),std(slope_M)],0,0.8)
-sampsizepwr('t',[mean(slope_S),std(slope_S)],0,0.8)
+sampsizepwr('t',[mean(slope_M),std(slope_M)],0,0.8,[],'Alpha',0.05)
+sampsizepwr('t',[mean(slope_S),std(slope_S)],0,0.8,[],'Alpha',0.05)
 
 
+%% fit logistic function
+
+
+a_M = [];
+b_M = [];
+r2_logistic_M = [];
+for n = 1:size(dataM,1)
+    [xData, yData] = prepareCurveData( peakHzNum, dataM(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [median(peakHzNum) 0.5];
+    opts.Lower = [min(peakHzNum) -Inf];
+    opts.Upper = [max(peakHzNum) Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a_M(n) = fitresult.a;
+    b_M(n) = fitresult.b;
+    r2_logistic_M(n) = gof.rsquare;
+
+
+end
+
+
+a_S = [];
+b_S = [];
+r2_logistic_S = [];
+for n = 1:size(dataS,1)
+    [xData, yData] = prepareCurveData( peakHzNum, dataS(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [median(peakHzNum) 0.5];
+    opts.Lower = [min(peakHzNum) -Inf];
+    opts.Upper = [max(peakHzNum) Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a_S(n) = fitresult.a;
+    b_S(n) = fitresult.b;
+    r2_logistic_S(n) = gof.rsquare;
+
+
+end
+
+[~,p, ~, stat] = ttest(b_M)
+[~,p, ~, stat] = ttest(b_S)
+mean([r2_logistic_M,r2_logistic_S]<0)
+mean([r2_logistic_M,r2_logistic_S]-[r2_M,r2_S])
+median([r2_logistic_M,r2_logistic_S]-[r2_M,r2_S])
+
+
+[~,p, ~, stat] = ttest([r2_logistic_M, r2_logistic_S], [r2_M,r2_S])

@@ -187,7 +187,6 @@ dataAll(dataAll.totalBias==0,:) = []; % whose responses were all 0
 dataAll(dataAll.probeACC<0.9,:) = []; % whose accuracy on the probe trials lower than 90%
 
 
-
 %% regression 
 
 
@@ -206,16 +205,19 @@ for n = 1:height(dataAll)
     r2_1(n) = mld.Rsquared.Ordinary;
     p1_fit(n) = coefTest(mld);
     slope_1(n) = mld.Coefficients.Estimate(2);
+    fittedLine_1(n,:) = mld.Fitted;
     
     mld = fitlm(0.15:0.1:0.55,x2);
     r2_2(n) = mld.Rsquared.Ordinary;
     p2_fit(n) = coefTest(mld);
     slope_2(n) = mld.Coefficients.Estimate(2);
+    fittedLine_2(n,:) = mld.Fitted;
     
     mld = fitlm(0.15:0.1:0.55,x3);
     r2_3(n) = mld.Rsquared.Ordinary;
     p3_fit(n) = coefTest(mld);
     slope_3(n) = mld.Coefficients.Estimate(2);
+    fittedLine_3(n,:) = mld.Fitted;
     
 end
 
@@ -239,60 +241,125 @@ std([r2_1,r2_2,r2_3])/sqrt(length([r2_1,r2_2,r2_3]))
 
 
 
-%% plot
+%% new plot
 
 
 
 col = lines(4);
 
 
-figure('Position', [10 10 1000 650])
+figure('Position', [10 10 1200 800])
 
-subplot(3,3,1)
-h1 = shadedErrorBar(0.15:0.1:0.55,mean(data1),std(data1)/sqrt(size(data1,1)),{'*-','color',col(1,:), 'LineWidth', 2},0.5);
+
+% 1 Hz
+subplot(3,10,[1,1.15])
+imagesc(0.15:0.1:0.55, 1:length(data1) ,data1, [1 2])
+yticks([])
+xticks([0.15:0.1:0.55])
+xticklabels({'0.15','','','','0.55'})
+ylabel('participants')
+xlabel('\sigma')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
+
+subplot(3,10,[2.5,4])
+p = plot(0.15:0.1:0.55,fittedLine_1,'color',[col(1,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(0.15:0.1:0.55,mean(fittedLine_1),'color','k', 'LineWidth', 2);
 xticks(0.15:0.1:0.55)
 xlim([0.15,0.55])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'music','','','','speech'})
+xtickangle(45)
+yticks([1,2])
+yticklabels({'music','speech'})
+% xlabel('\sigma')
 ylim([1,2])
 ylabel('response')
-set(gca,'fontsize',14)
+ytickangle(90)
+set(gca,'fontsize',12)
 title('1 Hz')
-grid on
+% grid on
 box on
 
-subplot(3,3,4)
-h2 = shadedErrorBar(0.15:0.1:0.55,mean(data2),std(data2)/sqrt(size(data2,1)),{'*-','color',col(2,:), 'LineWidth', 2},0.5);
+subplot(3,10,[9,10])
+scatter(slope_1,dataAll.gen,100,'filled','MarkerFaceColor',col(1,:),'MarkerFaceAlpha',.7);title('1 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
+
+
+
+% 2.5 Hz
+subplot(3,10,[1,1.15]+10)
+imagesc(0.15:0.1:0.55, 1:length(data2) ,data2, [1 2])
+yticks([])
+xticks([0.15:0.1:0.55])
+xticklabels({'0.15','','','','0.55'})
+ylabel('participants')
+xlabel('\sigma')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
+
+subplot(3,10,[2.5,4]+10)
+p = plot(0.15:0.1:0.55,fittedLine_2,'color',[col(2,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(0.15:0.1:0.55,mean(fittedLine_2),'color','k', 'LineWidth', 2);
 xticks(0.15:0.1:0.55)
 xlim([0.15,0.55])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'music','','','','speech'})
+xtickangle(45)
+% xlabel('\sigma')
+yticks([1,2])
+yticklabels({'music','speech'})
 ylim([1,2])
 ylabel('response')
-set(gca,'fontsize',14)
+ytickangle(90)
+set(gca,'fontsize',12)
 title('2.5 Hz')
-grid on
+% grid on
 box on
 
-subplot(3,3,7)
-h3 = shadedErrorBar(0.15:0.1:0.55,mean(data3),std(data3)/sqrt(size(data3,1)),{'*-','color',col(3,:), 'LineWidth', 2},0.5);
+subplot(3,10,[9,10]+10)
+scatter(slope_2,dataAll.gen,100,'filled','MarkerFaceColor',col(2,:),'MarkerFaceAlpha',.7);ylabel('General Musical Sophistication');title('2.5 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
+
+
+
+% 4 Hz
+subplot(3,10,[1,1.15]+20)
+imagesc(0.15:0.1:0.55, 1:length(data3) ,data3, [1 2])
+yticks([])
+xticks([0.15:0.1:0.55])
+xticklabels({'0.15','','','','0.55'})
+ylabel('participants')
+xlabel('\sigma')
+cb = colorbar('Ticks',[1,2], 'TickLabels',{'music','speech'},'location','westoutside');
+cb.Ruler.TickLabelRotation=90;
+cb.Label.String = 'response';
+
+subplot(3,10,[2.5,4]+20)
+p = plot(0.15:0.1:0.55,fittedLine_3,'color',[col(3,:),0.35], 'LineWidth', 1);
+hold on
+p = plot(0.15:0.1:0.55,mean(fittedLine_3),'color','k', 'LineWidth', 2);
 xticks(0.15:0.1:0.55)
 xlim([0.15,0.55])
-yticks([1,1.25,1.5,1.75,2])
-yticklabels({'music','','','','speech'})
+xtickangle(45)
+xlabel('\sigma')
+yticks([1,2])
+yticklabels({'music','speech'})
 ylim([1,2])
 ylabel('response')
-set(gca,'fontsize',14)
-xlabel('\sigma','fontsize',20)
+ytickangle(90)
+set(gca,'fontsize',12)
 title('4 Hz')
-grid on
+% grid on
 box on
 
+subplot(3,10,[9,10]+20)
+scatter(slope_3,dataAll.gen,100,'filled','MarkerFaceColor',col(3,:),'MarkerFaceAlpha',.7);xlabel('response slope');title('4 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
 
 
 
 
-subplot(1,3,2)
+
+subplot(1,10,[5.5,7.5])
+
 bar(1,mean(slope_1),'facecolor',col(1,:),'LineWidth',2);hold on
 bar(2,mean(slope_2),'facecolor',col(2,:),'LineWidth',2);
 bar(3,mean(slope_3),'facecolor',col(3,:),'LineWidth',2);
@@ -312,17 +379,6 @@ set(gca,'fontsize',14)
 
 
 
-subplot(3,3,3);
-scatter(slope_1,dataAll.gen,'MarkerEdgeColor',col(1,:),'LineWidth',2);title('1 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
-
-subplot(3,3,6);
-scatter(slope_2,dataAll.gen,'MarkerEdgeColor',col(2,:),'LineWidth',2);title('2.5 Hz');ylabel('General Musical Sophistication');set(gca,'fontsize',14);ylim([18,126]);box on;
-
-subplot(3,3,9);
-scatter(slope_3,dataAll.gen,'MarkerEdgeColor',col(3,:),'LineWidth',2);xlabel('response slope');title('4 Hz');set(gca,'fontsize',14);ylim([18,126]);box on;
-
-
-
 %% estimate required N
 
 sampsizepwr('t',[mean(slope_1),std(slope_1)],0,0.8)
@@ -330,4 +386,90 @@ sampsizepwr('t',[mean(slope_2),std(slope_2)],0,0.8)
 sampsizepwr('t',[mean(slope_3),std(slope_3)],0,0.8)
 
 
+%% fit logistic function
+
+
+a1 = [];
+b1 = [];
+r2_logistic1 = [];
+for n = 1:size(data1,1)
+    [xData, yData] = prepareCurveData( 0.15:0.1:0.55, data1(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [0.35 0.5];
+    opts.Lower = [0.15 -Inf];
+    opts.Upper = [0.55 Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a1(n) = fitresult.a;
+    b1(n) = fitresult.b;
+    r2_logistic1(n) = gof.rsquare;
+
+
+end
+
+
+a2 = [];
+b2 = [];
+r2_logistic2 = [];
+for n = 1:size(data2,1)
+    [xData, yData] = prepareCurveData( 0.15:0.1:0.55, data2(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [0.35 0.5];
+    opts.Lower = [0.15 -Inf];
+    opts.Upper = [0.55 Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a2(n) = fitresult.a;
+    b2(n) = fitresult.b;
+    r2_logistic2(n) = gof.rsquare;
+
+
+end
+
+
+a3 = [];
+b3 = [];
+r2_logistic3 = [];
+for n = 1:size(data3,1)
+    [xData, yData] = prepareCurveData( 0.15:0.1:0.55, data3(n,:)-1 );
+    
+    % Set up fittype and options.
+    ft = fittype( '1/(1+exp(-b*(x-a)))', 'independent', 'x', 'dependent', 'y' );
+    opts = fitoptions( 'Method', 'NonlinearLeastSquares' );
+    opts.Display = 'Off';
+    opts.Robust = 'LAR';
+    opts.StartPoint = [0.35 0.5];
+    opts.Lower = [0.15 -Inf];
+    opts.Upper = [0.55 Inf];
+    
+    % Fit model to data.
+    [fitresult, gof] = fit( xData, yData, ft, opts );
+    a3(n) = fitresult.a;
+    b3(n) = fitresult.b;
+    r2_logistic3(n) = gof.rsquare;
+
+
+end
+
+[~,p, ~, stat] = ttest(b1)
+[~,p, ~, stat] = ttest(b2)
+[~,p, ~, stat] = ttest(b3)
+
+[~,p, ~, stat] = ttest([r2_logistic1, r2_logistic2, r2_logistic3], [r2_1,r2_2,r2_3])
+
+mean([r2_logistic1, r2_logistic2, r2_logistic3] - [r2_1,r2_2,r2_3])
+median([r2_logistic1, r2_logistic2, r2_logistic3] - [r2_1,r2_2,r2_3])
+mean([r2_logistic1, r2_logistic2, r2_logistic3]<0)
 
