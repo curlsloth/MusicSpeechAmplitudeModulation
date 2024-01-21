@@ -215,6 +215,14 @@ sp = sqrt( ((sum(slope<0)-1)*std(dataAll.gen(slope<0))^2 + (sum(slope>0)-1)*std(
 cohenD = abs((mean(dataAll.gen(slope<0))-mean(dataAll.gen(slope>0)))/sp)
 
 
+%% correlation between slope and subscores of musical sophistication score
+[r_actEng,p_actEng] = corr(slope',dataAll.actEng)
+[r_perAbi,p_perAbi] = corr(slope',dataAll.perAbi)
+[r_musTra,p_musTra] = corr(slope',dataAll.musTra)
+[r_sinAbi,p_sinAbi] = corr(slope',dataAll.sinAbi)
+[r_emo,p_emo] = corr(slope',dataAll.emo)
+
+
 %% plot
 
 dataPlot = dataAll.percResp;
