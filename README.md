@@ -1,7 +1,5 @@
 # MusicSpeechAmplitudeModulation
 
-![github_banner](https://user-images.githubusercontent.com/52460429/200193326-d9420e40-b338-4d1f-8c4b-91d95d7fe930.png)
-
 Data and code associated with Chang et al. (https://doi.org/10.31234/osf.io/juzrh) 
 
 Experiments \
