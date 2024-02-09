@@ -5,19 +5,23 @@ Data and code associated with this [preprint](https://doi.org/10.31234/osf.io/ju
 
 ## Audio examples
 
-*High peak AM frequency & High temporal regularity*
+Peak AM frequency: *High* \
+Temporal regularity: *High*
 
 https://github.com/curlsloth/MusicSpeechAmplitudeModulation/assets/52460429/cf097a97-c011-4eda-b875-379bc86f6434
 
-*High peak AM frequency & Low temporal regularity*
+Peak AM frequency: *High* \
+Temporal regularity: *Low*
 
 https://github.com/curlsloth/MusicSpeechAmplitudeModulation/assets/52460429/24b933c0-03ea-4ddc-978f-829296dc0101
 
-*Low peak AM frequency & High temporal regularity*
+Peak AM frequency: *Low* \
+Temporal regularity: *High*
 
 https://github.com/curlsloth/MusicSpeechAmplitudeModulation/assets/52460429/cc1fd45b-b0d9-470e-8176-ef032e5a6be7
 
-*Low peak AM frequency & Low temporal regularity*
+Peak AM frequency: *Low* \
+Temporal regularity: *Low*
 
 https://github.com/curlsloth/MusicSpeechAmplitudeModulation/assets/52460429/ac248410-b2dc-4644-9a09-90ee9589c92f
 
