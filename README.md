@@ -1,6 +1,10 @@
 # Music Speech Amplitude Modulation
 
-Data and code associated with this [preprint](https://doi.org/10.31234/osf.io/juzrh) 
+This repo contains the data and the MATLAB script of my published paper:
+
+[OSF project](https://doi.org/10.17605/OSF.IO/RDTGC)
+
+[Preprint](https://doi.org/10.31234/osf.io/juzrh) 
 
 
 ## Audio examples
