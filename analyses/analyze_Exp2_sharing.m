@@ -186,6 +186,8 @@ dataAll(dataAll.totalBias==1,:) = []; % whose responses were all 1
 dataAll(dataAll.totalBias==0,:) = []; % whose responses were all 0
 dataAll(dataAll.probeACC<0.9,:) = []; % whose accuracy on the probe trials lower than 90%
 
+writetable(dataAll,'dataTable_fig3.csv')
+
 
 %% regression 
 

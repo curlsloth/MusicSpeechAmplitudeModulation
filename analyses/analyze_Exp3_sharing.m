@@ -202,6 +202,7 @@ dataAll(dataAll.probeACC<0.9,:) = []; % whose accuracy on the probe trials lower
 dataAll(abs(dataAll.totalBiasM-0.5)>0.15,:) = [];
 dataAll(abs(dataAll.totalBiasS-0.5)>0.15,:) = [];
 
+writetable(dataAll,'dataTable_fig4ABCD.csv')
 
 
 %% regression
