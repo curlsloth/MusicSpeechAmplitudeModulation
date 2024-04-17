@@ -186,8 +186,6 @@ dataAll(dataAll.totalBias==1,:) = []; % whose responses were all 1
 dataAll(dataAll.totalBias==0,:) = []; % whose responses were all 0
 dataAll(dataAll.probeACC<0.9,:) = []; % whose accuracy on the probe trials lower than 90%
 
-writetable(dataAll,'dataTable_fig3.csv')
-
 
 %% regression 
 
@@ -235,6 +233,10 @@ abs(mean(slope_3)/std(slope_3))
 
 mean([r2_1,r2_2,r2_3])
 std([r2_1,r2_2,r2_3])/sqrt(length([r2_1,r2_2,r2_3]))
+
+%% save data table
+save_table = table(slope_1', slope_2', slope_3', dataAll.gen, 'VariableNames',["slope_1Hz","slope_2.5Hz", "slope_4Hz","MSI-general"]);
+writetable(save_table,'S2_Data_Fig3CD.csv')
 
 %% correlation between slope and musical sophistication score
 [r_MSIgen,p_MSIgen] = corr(slope_1',dataAll.gen)

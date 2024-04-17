@@ -202,8 +202,6 @@ dataAll(dataAll.probeACC<0.9,:) = []; % whose accuracy on the probe trials lower
 dataAll(abs(dataAll.totalBiasM-0.5)>0.15,:) = [];
 dataAll(abs(dataAll.totalBiasS-0.5)>0.15,:) = [];
 
-writetable(dataAll,'dataTable_fig4EFGH.csv')
-
 
 %% regression
 
@@ -244,6 +242,10 @@ r2_S(isnan(r2_S))=0;
 
 mean([r2_M,r2_S])
 std([r2_M,r2_S])/sqrt(length([r2_M,r2_S]))
+
+%% save data table
+save_table = table(slope_M', slope_S', dataAll.gen, 'VariableNames',["slope_music","slope_speech","MSI-general"]);
+writetable(save_table,'S4_Data_Fig4GH.csv')
 
 
 %% correlation between slope and musical sophistication score
