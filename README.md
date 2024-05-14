@@ -1,8 +1,8 @@
 # Music Speech Amplitude Modulation
 
-This repo contains the data and the MATLAB script of my published paper:
+This repo contains the data and the MATLAB script of my published paper (open access):
 
-[**Chang, A., Teng, X., Assaneo, M.F., Poeppel, D. (2024) The human auditory system uses amplitude modulation to distinguish music from speech. PLOS Biology, 22(5): e3002631**](https://doi.org/10.1371/journal.pbio.3002631)
+- Chang, A., Teng, X., Assaneo, M.F., Poeppel, D. (2024) The human auditory system uses amplitude modulation to distinguish music from speech. *PLOS Biology*, 22(5): e3002631 [https://doi.org/10.1371/journal.pbio.3002631]
 
 Other related links:
 
