@@ -4,6 +4,11 @@ This repo contains the data and the MATLAB script of my published paper (open ac
 
 - Chang, A., Teng, X., Assaneo, M.F., Poeppel, D. (2024) The human auditory system uses amplitude modulation to distinguish music from speech. *PLOS Biology*, 22(5): e3002631 [https://doi.org/10.1371/journal.pbio.3002631]
 
+Featured in the media:
+
+- [CBC Radio's Quirks & Quarks](https://www.cbc.ca/listen/live-radio/1-51-quirks-and-quarks/clip/16075112-how-brain-instantly-tell-difference-between-speech-music): How the brain can instantly tell the difference between speech and music
+- [NYU News](https://www.nyu.edu/about/news-publications/news/2024/may/is-it-a-sound-of-music-or-of-speech--scientists-uncover-how-our-.html): Is It a Sound of Music…or of Speech? Scientists Uncover How Our Brains Try to Tell the Difference
+
 Other related links:
 
 - [OSF project](https://doi.org/10.17605/OSF.IO/RDTGC)
