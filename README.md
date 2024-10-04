@@ -8,6 +8,7 @@ Featured in the media:
 
 - [Scientific American](https://www.scientificamerican.com/article/how-your-brain-tells-speech-and-music-apart/): How Your Brain Tells Speech and Music Apart
 - [CBC Radio's Quirks & Quarks](https://www.cbc.ca/listen/live-radio/1-51-quirks-and-quarks/clip/16075112-how-brain-instantly-tell-difference-between-speech-music): How the brain can instantly tell the difference between speech and music
+- [NPR Podcast: The Academic Minute](https://academicminute.org/2024/10/andrew-chang-new-york-university-is-it-a-sound-of-musicor-of-speech/): Is It a Sound of Music…or of Speech? (featured in New York University week)
 - [NYU News](https://www.nyu.edu/about/news-publications/news/2024/may/is-it-a-sound-of-music-or-of-speech--scientists-uncover-how-our-.html): Is It a Sound of Music…or of Speech? Scientists Uncover How Our Brains Try to Tell the Difference
 
 Other related links:
